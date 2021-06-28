@@ -14,6 +14,19 @@ bot.on('ready', () => {
     console.log(`${bot.user.username} est fonctionnel!`);
 });
 
+bot.on("ready", () => {
+    const statuses = [
+        () => "!ping",
+        () => "!help",
+        () => "!price"
+    ]
+    let i = 0
+    setInterval(() => {
+        bot.user.setActivity(statuses[i](), {type: "WATCHING"})
+        i = ++i % statuses.length
+    }, 1e4)
+})
+
 bot.on('message', async (message) => {
     if (message.author.bot) return;
 
@@ -52,7 +65,7 @@ bot.on('message', async (message) => {
 
     if (message.content.startsWith('!help')) {
         return message.reply(
-          `Je connais 4 commandes:\n
+          `Je connais 3 commandes:\n
           !ping - Pour voir si je fonctionne\n
           !price <nom_de_la_crypto> <devise_a_comparer> - Renvoie le prix actuelle de la crypto indiquée vs la devise indiquée\n
           !help - Pour checker les commandes disponibles !`
