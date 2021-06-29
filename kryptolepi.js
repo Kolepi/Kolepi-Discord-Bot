@@ -31,7 +31,8 @@ bot.on('message', async (message) => {
     if (message.author.bot) return;
 
     if (message.content.startsWith('!ping')) {
-        return message.reply('Bien reçu!');
+        const timeTaken = Date.now() - message.createdTimestamp;
+        message.reply(`La latence est de ${timeTaken}ms.`)
     }
 
     if (message.content.startsWith('!price')) {
