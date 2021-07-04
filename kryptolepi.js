@@ -3,22 +3,62 @@ const {
 } = require('discord.js');
 const dotenv = require('dotenv');
 const axios = require('axios');
+const fetch = require("node-fetch")
 
 dotenv.config();
 
 const bot = new Client();
 
-bot.login(process.env.DISCORD_BOT_TOKEN);
+var cryptomonnaies = {};
+
+setInterval(() => {
+    getValue("bitcoin", "usd");
+    getValue("ethereum", "usd");
+    getValue("binancecoin", "usd");
+    getValue("cardano", "usd");
+    getValue("dogecoin", "usd");
+    getValue("polkadot", "usd");
+    getValue("uniswap", "usd");
+    getValue("solana", "usd");
+    getValue("chainlink", "usd");
+    getValue("pancakeswap-token", "usd");
+}, 2000)
+
+bot.login("ODU5MDQ0OTMzNjg3NzA1NjAw.YNm98A.Kj4rd5p3NSlry_aImcoaERb5c7E");
 
 bot.on('ready', () => {
     console.log(`${bot.user.username} est fonctionnel!`);
 });
 
+
+// Statuses
+
+function displayPrice(ids, devise) {
+    return (cryptomonnaies && cryptomonnaies[ids] && cryptomonnaies[ids][devise]) ? cryptomonnaies[ids][devise] + "" : "";
+}
+
+function getValue(ids, devise) {
+    fetch("https://api.coingecko.com/api/v3/simple/price?ids="+ ids + "&vs_currencies="+ devise)
+        .then((response) => response.json())
+        .then((value) => {
+            cryptomonnaies[ids] = {};
+            cryptomonnaies[ids][devise] = value[ids][devise];
+        })
+        .catch((err) => console.error)
+    }
+
 bot.on("ready", () => {
     const statuses = [
-        () => "!ping",
-        () => "!help",
-        () => "!price"
+        () => "BTC = " + displayPrice("bitcoin", "usd") + "$",
+        () => "ETH = " + displayPrice("ethereum", "usd") + "$",
+        () => "BNB = " + displayPrice("binancecoin", "usd") + "$",
+        () => "ADA = " + displayPrice("cardano", "usd") + "$",
+        () => "DOGE = " + displayPrice("dogecoin", "usd") + "$",
+        () => "DOT = " + displayPrice("polkadot", "usd") + "$",
+        () => "UNI = " + displayPrice("uniswap", "usd") + "$",
+        () => "SOL = " + displayPrice("solana", "usd") + "$",
+        () => "LINK = " + displayPrice("chainlink", "usd") + "$",
+        () => "CAKE = " + displayPrice("pancakeswap-token", "usd") + "$",
     ]
     let i = 0
     setInterval(() => {
@@ -27,6 +67,8 @@ bot.on("ready", () => {
     }, 1e4)
 })
 
+
+// Commandes
 bot.on('message', async (message) => {
     if (message.author.bot) return;
 
