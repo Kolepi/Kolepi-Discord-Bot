@@ -106,24 +106,11 @@ bot.on('message', async (message) => {
         }
     }
 
-    if (message.content.startsWith('!help')) {
-        return message.reply(
-          `Je connais 3 commandes:\n
-          !ping - Pour voir si je fonctionne\n
-          !price <nom_de_la_crypto> <devise_a_comparer> - Renvoie le prix actuelle de la crypto indiquée vs la devise indiquée\n
-          !help - Pour checker les commandes disponibles !`
-        );
-      }
-
 
     if (message.content.startsWith("!stats")) {
         return message.reply
             ({ embed: {
                 color: "RANDOM",
-                author: {
-                  name: bot.user.username,
-                  icon_url: bot.user.displayAvatarURL()
-                },
                 title: "Statistiques de Kryptolepi",
                 url: "https://twitter.com/kryptolepi",
                 fields: [{
@@ -136,10 +123,9 @@ bot.on('message', async (message) => {
                   },
                   {
                     name: "Users",
-                    value: `${bot.users.cache.size}`
+                    value: `${bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)}`
                   }
                 ],
-                timestamp: new Date(),
                 footer: {
                   icon_url: bot.user.displayAvatarURL(),
                   text: "© Kryptolepi"
@@ -147,4 +133,35 @@ bot.on('message', async (message) => {
               }
             }
         )}
+
+        if (message.content.startsWith("!help")) {
+            message.channel.send({
+                embed: {
+                    color: "RANDOM",
+                    title: "help",
+                    description: "Voila toutes les commandes que je connais !",
+                    fields: [{
+                            name: "!ping",
+                            value: "Renvoie le temps de réponse du bot."
+                        },
+                        {
+                            name: "!help",
+                            value: "Renvoie les commandes disponibles."
+                        },
+                        {
+                            name: "!price <id d'une crypto> + <devise>",
+                            value: "Renvoie le prix d'une crypto."
+                        },
+                        {
+                            name: "!stats",
+                            value: "Statistiques de Kryptolepi."
+                        }
+                    ],
+                    footer: {
+                        icon_url: bot.user.displayAvatarURL(),
+                        text: "© Kryptolepi"
+                      }
+                }
+            });
+        }
     });
