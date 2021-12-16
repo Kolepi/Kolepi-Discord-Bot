@@ -24,7 +24,7 @@ setInterval(() => {
     getValue("pancakeswap-token", "usd");
 }, 2000)
 
-bot.login("ODU5MDQ0OTMzNjg3NzA1NjAw.YNm98A.UgBzL-Rg88iaWtNr0VlWuZR-_HM");
+bot.login("");
 
 bot.on('ready', () => {
     console.log(`${bot.user.username} est fonctionnel!`);
